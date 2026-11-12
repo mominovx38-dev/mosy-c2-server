@@ -1,7 +1,8 @@
 import socket
 import tkinter as tk
-from tkinter import ttk, messagebox, scrolledtext
+from tkinter import ttk
 
+# Render'dagi server manzili
 SERVER_HOST = 'mosy-c2-server.onrender.com'
 SERVER_PORT = 4444
 

